@@ -1,7 +1,5 @@
 import {cart, addToCart} from '../data/cart.js';
 import {products, loadProducts} from '../data/products.js';
-// import { formatCurrency } from './utils/money.js';
-
 loadProducts(renderProductsGrid);
 
 function renderProductsGrid(){
@@ -63,46 +61,30 @@ function renderProductsGrid(){
       </div>`;
 
   });
-
   console.log(productsHTML);
-
   document.querySelector('.js-products-grid')
     .innerHTML=productsHTML;
-
   function updateCartQuantity(){
     let cartQuantity=0;
     cart.forEach((cartItem)=>{
       cartQuantity+=cartItem.quantity;
     });
-
     document.querySelector('.js-cart-quantity')
       .innerHTML=cartQuantity;
   }
-
-  // Initialize cart quantity on page load
   updateCartQuantity();
-
   document.querySelectorAll('.js-add-to-cart-button')
     .forEach((button)=>{
       button.addEventListener('click',()=> {
         const productId=button.dataset.productId;
-        
-        // Get the selected quantity
         const quantitySelector = document.querySelector(`.js-quantity-selector-${productId}`);
         const quantity = Number(quantitySelector.value);
-        
-        // Add the selected quantity to cart
         for(let i = 0; i < quantity; i++) {
           addToCart(productId);
         }
-        
         updateCartQuantity();
-        
-        // Show "Added to Cart" message
         const addedMessage = document.querySelector(`.js-added-to-cart-${productId}`);
         addedMessage.style.opacity = '1';
-        
-        // Hide the message after 2 seconds
         setTimeout(() => {
           addedMessage.style.opacity = '0';
         }, 2000);
