@@ -32,7 +32,7 @@ function renderProductsGrid(){
         </div>
 
         <div class="product-quantity-container">
-          <select>
+          <select class="js-quantity-selector-${product.id}">
             <option selected value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
@@ -50,7 +50,7 @@ function renderProductsGrid(){
 
         <div class="product-spacer"></div>
 
-        <div class="added-to-cart">
+        <div class="added-to-cart js-added-to-cart-${product.id}">
           <img src="images/icons/checkmark.png">
           Added
         </div>
@@ -79,12 +79,33 @@ function renderProductsGrid(){
       .innerHTML=cartQuantity;
   }
 
+  // Initialize cart quantity on page load
+  updateCartQuantity();
+
   document.querySelectorAll('.js-add-to-cart-button')
     .forEach((button)=>{
       button.addEventListener('click',()=> {
         const productId=button.dataset.productId;
-        addToCart(productId);
+        
+        // Get the selected quantity
+        const quantitySelector = document.querySelector(`.js-quantity-selector-${productId}`);
+        const quantity = Number(quantitySelector.value);
+        
+        // Add the selected quantity to cart
+        for(let i = 0; i < quantity; i++) {
+          addToCart(productId);
+        }
+        
         updateCartQuantity();
+        
+        // Show "Added to Cart" message
+        const addedMessage = document.querySelector(`.js-added-to-cart-${productId}`);
+        addedMessage.style.opacity = '1';
+        
+        // Hide the message after 2 seconds
+        setTimeout(() => {
+          addedMessage.style.opacity = '0';
+        }, 2000);
       });
     });
 }
